@@ -3,8 +3,6 @@ runtime: org.freedesktop.Platform
 runtime-version: '23.08'
 sdk: org.freedesktop.Sdk
 command: ioquake3
-rename-desktop-file: ioquake3.desktop
-rename-icon: quake3
 finish-args:
   - --socket=pulseaudio
   - --socket=fallback-x11
@@ -30,9 +28,11 @@ modules:
       - make -j $FLATPAK_BUILDER_N_JOBS copyfiles
       - mv /app/games/quake3/ioquake3{.${IOQ3_ARCH},}
       - install -Dm644 misc/quake3.svg
-                -t /app/share/icons/hicolor/scalable/apps/
+                /app/share/icons/hicolor/scalable/apps/org.ioquake3.ioquake3.svg
       - install -Dm644 misc/setup/ioquake3.desktop
-                -t /app/share/applications/
+                /app/share/applications/org.ioquake3.ioquake3.desktop
+      - desktop-file-edit --set-key=Icon --set-value=org.ioquake3.ioquake3
+                /app/share/applications/org.ioquake3.ioquake3.desktop
       - install -Dm644 misc/setup/org.ioquake3.ioquake3.metainfo.xml
                 -t /app/share/metainfo
       - install -Dm744 ioquake3 -t /app/bin
