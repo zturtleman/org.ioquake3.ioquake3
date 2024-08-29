@@ -5,8 +5,9 @@ sdk: org.freedesktop.Sdk
 command: ioquake3
 finish-args:
   - --socket=pulseaudio
-  - --socket=fallback-x11
   - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
   - --share=network
   - --device=all
 
@@ -39,11 +40,10 @@ modules:
     sources:
       - type: git
         url: https://github.com/ioquake/ioq3.git
-        commit: b1e6ef14254fdcb77cbe2f602c22549d3fb0eb78
+        commit: a1fe522d3db21242e214624cb4ab722774b8372c
       - type: patch
         path: ioquake3_appstream.patch
       # ioquake3 launcher script that:
-      # - … makes ~/.q3a/ available at ~/.var/app/org.ioquake3.ioquake3/data/
-      # - … explains (via zenity) where the user can put configs and pk3-files.
+      # - … moves existing Flatpak user data to the new location
       - type: file
         path: ioquake3

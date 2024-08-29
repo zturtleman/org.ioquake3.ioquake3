@@ -1,37 +1,11 @@
 #!/bin/bash
 
-# Copyright 2021 Mattias Bengtsson <mattias.jc.bengtsson@gmail.com>
-# SPDX-License-Identifier: GPL-3.0-or-later
-
-function error-message {
-    cat << EOM
-ioquake3 needs the official Quake 3 .pk3-files to function
-properly (specifically baseq3/pak0.pk3 … baseq3/pak8.pk3).
-
-One way to obtain these files is to buy Quake 3 Arena on
-Steam, and extract the files from the installation directory.
-
-Once you've obtained the files, copy them to:
-
-    ~/.var/app/org.ioquake3.ioquake3/data/baseq3/
-
-… and restart ioquake3
-EOM
-}
-
-# Ensure ioquake3 reaches our pak-files and configs.
-ln -ns "${XDG_DATA_HOME}" "${HOME}/.q3a"
-
-mkdir -p "${XDG_DATA_HOME}"/{baseq3,missionpack}
-
-for i in $(seq 0 8); do
-    if [ ! -f "${XDG_DATA_HOME}/baseq3/pak${i}.pk3" ]; then
-        zenity --error      \
-               --width=400  \
-               --height=200 \
-               --text="$(error-message)"
-        exit 2
-    fi
-done
+# Move existing Flatpak user data to the new location
+# ${XDG_DATA_HOME} -> ${XDG_DATA_HOME}/q3a
+if [ -f "${XDG_DATA_HOME}/qkey" -a ! -d "${XDG_DATA_HOME}/q3a" ]; then
+	mv "${XDG_DATA_HOME}" "${XDG_DATA_HOME}/../q3a-tmp"
+	mkdir "${XDG_DATA_HOME}"
+	mv "${XDG_DATA_HOME}/../q3a-tmp" "${XDG_DATA_HOME}/q3a"
+fi
 
 /app/games/quake3/ioquake3 "${@}"
